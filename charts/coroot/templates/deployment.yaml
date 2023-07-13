@@ -77,13 +77,13 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.corootCE.resources | nindent 12 }}
-          volumeMounts:
-            - mountPath: /data
-              name: data
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: {{ template "coroot.fullname" . }}-data
+      #     volumeMounts:
+      #       - mountPath: /data
+      #         name: data
+      # volumes:
+      #   - name: data
+      #     persistentVolumeClaim:
+      #       claimName: {{ template "coroot.fullname" . }}-data
       {{- with .Values.corootCE.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

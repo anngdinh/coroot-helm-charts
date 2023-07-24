@@ -1,20 +1,21 @@
-# Coroot Helm Charts
-
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+# Coroot Custom Helm Charts
 
 ## Usage
 
-[Helm](https://helm.sh) must be installed to use the charts.
-Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
-
-Once Helm is set up properly, add the repo and install Coroot:
+### Install `chartmuseum` via Docker
 
 ```console
-helm repo add coroot https://coroot.github.io/helm-charts
-helm repo update
-helm upgrade --install --namespace coroot --create-namespace coroot coroot/coroot
+sudo docker run --rm -u 0 -it -p 8088:8080 -e DEBUG=1 -e STORAGE=local -e STORAGE_LOCAL_ROOTDIR=/charts -v $(pwd)/charts:/charts chartmuseum/chartmuseum:latest
 ```
 
-## License
+### Dowload and build dependency
 
-[Apache 2.0 License](https://github.com/coroot/helm-charts/blob/main/LICENSE).
+```console
+make dependency
+```
+
+### Install via Helm
+
+```console
+make install
+```

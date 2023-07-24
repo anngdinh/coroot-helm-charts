@@ -96,7 +96,7 @@ node-agent:
     tracesEndpoint: "http://coroot-opentelemetry-collector:4318/v1/traces"
 
 pyroscope:
-  enabled: true
+  enabled: false
   persistence:
     enabled: true
     size: 30Gi
@@ -148,7 +148,7 @@ pyroscope:
             replacement: __profile_$1
 
 pyroscope-ebpf:
-  enabled: true
+  enabled: false
   args: ["ebpf","--application-name", "k8s.ebpf", "--server-address", "http://coroot-pyroscope:4040"]
   tolerations:
     - operator: Exists

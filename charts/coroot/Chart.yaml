@@ -6,22 +6,22 @@ version: 0.7.0
 appVersion: "0.25.0"
 dependencies:
   - name: prometheus
-    repository: https://prometheus-community.github.io/helm-charts
-    version: 15.16.*
+    repository: http://localhost:8088
+    version: 25.8.0
     condition: prometheus.enabled
   - name: node-agent
     version: 0.1.51
-    repository: https://coroot.github.io/helm-charts
+    repository: http://localhost:8088
     condition: node-agent.enabled
   - name: pyroscope
-    repository: https://pyroscope-io.github.io/helm-chart
-    version: 0.2.*
+    repository: http://localhost:8088
+    version: 0.2.92
     condition: pyroscope.enabled
   - name: clickhouse
-    version: 3.1.*
-    repository: https://charts.bitnami.com/bitnami
+    version: 4.1.8
+    repository: http://localhost:8088
     condition: clickhouse.enabled
   - name: opentelemetry-collector
-    version: 0.52.*
-    repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+    version: 0.52.1
+    repository: http://localhost:8088
     condition: opentelemetry-collector.enabled

@@ -36,6 +36,8 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
+            - name: TRACK_PUBLIC_NETWORK
+              value: 0.0.0.0/0
           {{- if .Values.otel.tracesEndpoint }}
             - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
               value: "{{ .Values.otel.tracesEndpoint }}"
@@ -60,6 +62,9 @@ spec:
             - mountPath: /host/sys/fs/cgroup
               name: cgroupfs
               readOnly: true
+            - mountPath: /var/run/crio/crio.sock
+              name: criosock
+              readOnly: true
             - mountPath: /sys/kernel/debug
               name: debugfs
               readOnly: false
@@ -67,6 +72,9 @@ spec:
         - hostPath:
             path: /sys/fs/cgroup
           name: cgroupfs
+        - hostPath:
+            path: /var/run/crio/crio.sock
+          name: criosock
         - hostPath:
             path: /sys/kernel/debug
           name: debugfs

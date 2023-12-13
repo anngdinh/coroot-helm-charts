@@ -1,4 +1,4 @@
-{{- if .Values.corootCE.enabled -}}
+{{- if .Values.corootCE.persistentVolume.enabled -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:

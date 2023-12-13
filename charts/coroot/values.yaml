@@ -60,10 +60,15 @@ corootCE:
       cpu: 100m
       memory: 1Gi
   persistentVolume:
+    enabled: false
     size: 10Gi
-    storageClassName: ""
-  nodeSelector: {}
-  tolerations: []
+    storageClassName: "local-storage"
+  nodeSelector: { backend: "true" }
+  tolerations:
+    - key: backend
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
   affinity: {}
   env: []
 
@@ -97,8 +102,12 @@ corootConnect:
     requests:
       cpu: 100m
       memory: 1Gi
-  nodeSelector: {}
-  tolerations: []
+  nodeSelector: { backend: "true" }
+  tolerations:
+    - key: backend
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
   affinity: {}
   env: []
 
@@ -108,7 +117,9 @@ prometheus:
     enabled: false
   nodeExporter:
     enabled: false
-  pushgateway:
+  prometheus-pushgateway:
+    enabled: false
+  prometheus-node-exporter:
     enabled: false
   kubeStateMetrics:
     enabled: true
@@ -121,7 +132,15 @@ prometheus:
       scrape_interval: 15s
     retention: 1d
     persistentVolume:
+      enabled: false
       size: 10Gi
+      storageClass: "local-storage"
+    nodeSelector: { backend: "true" }
+    tolerations:
+      - key: backend
+        operator: Equal
+        value: "true"
+        effect: NoSchedule
   serverFiles:
     prometheus.yml:
       scrape_configs:
@@ -384,8 +403,15 @@ node-agent:
 pyroscope:
   enabled: true
   persistence:
-    enabled: true
+    enabled: false
     size: 30Gi
+    storageClassName: "local-storage"
+  nodeSelector: { backend: "true" }
+  tolerations:
+    - key: backend
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
   rbac:
     create: true
   pyroscopeConfigs:
@@ -436,11 +462,22 @@ pyroscope:
 clickhouse:
   enabled: true
   persistence:
-    size: 50Gi
+    enabled: false
+    size: 48Gi
+    storageClassName: "local-storage"
   replicaCount: 1
   shards: 1
   zookeeper:
     enabled: false
+  auth:
+    username: default
+    password: annd2
+  nodeSelector: { backend: "true" }
+  tolerations:
+    - key: backend
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
 
 opentelemetry-collector:
   enabled: true

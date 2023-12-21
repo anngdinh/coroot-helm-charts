@@ -3,4 +3,4 @@ name: node-agent
 description: A Prometheus exporter based on eBPF that gathers comprehensive container metrics.
 type: application
 version: 0.1.51
-appVersion: "1.15.0"
+appVersion: "1.15.1"

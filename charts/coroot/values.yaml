@@ -60,15 +60,11 @@ corootCE:
       cpu: 100m
       memory: 1Gi
   persistentVolume:
-    enabled: false
+    enabled: true
     size: 10Gi
     storageClassName: "local-storage"
-  nodeSelector: { backend: "true" }
-  tolerations:
-    - key: backend
-      operator: Equal
-      value: "true"
-      effect: NoSchedule
+  nodeSelector: {}
+  tolerations: []
   affinity: {}
   env: []
 
@@ -102,12 +98,8 @@ corootConnect:
     requests:
       cpu: 100m
       memory: 1Gi
-  nodeSelector: { backend: "true" }
-  tolerations:
-    - key: backend
-      operator: Equal
-      value: "true"
-      effect: NoSchedule
+  nodeSelector: {}
+  tolerations: []
   affinity: {}
   env: []
 
@@ -132,15 +124,11 @@ prometheus:
       scrape_interval: 15s
     retention: 1d
     persistentVolume:
-      enabled: false
+      enabled: true
       size: 10Gi
       storageClass: "local-storage"
-    nodeSelector: { backend: "true" }
-    tolerations:
-      - key: backend
-        operator: Equal
-        value: "true"
-        effect: NoSchedule
+    nodeSelector: {}
+    tolerations: []
   serverFiles:
     prometheus.yml:
       scrape_configs:
@@ -403,15 +391,11 @@ node-agent:
 pyroscope:
   enabled: true
   persistence:
-    enabled: false
+    enabled: true
     size: 30Gi
     storageClassName: "local-storage"
-  nodeSelector: { backend: "true" }
-  tolerations:
-    - key: backend
-      operator: Equal
-      value: "true"
-      effect: NoSchedule
+  nodeSelector: {}
+  tolerations: []
   rbac:
     create: true
   pyroscopeConfigs:
@@ -462,7 +446,7 @@ pyroscope:
 clickhouse:
   enabled: true
   persistence:
-    enabled: false
+    enabled: true
     size: 48Gi
     storageClassName: "local-storage"
   replicaCount: 1
@@ -472,15 +456,13 @@ clickhouse:
   auth:
     username: default
     password: annd2
-  nodeSelector: { backend: "true" }
-  tolerations:
-    - key: backend
-      operator: Equal
-      value: "true"
-      effect: NoSchedule
+  nodeSelector: {}
+  tolerations: []
 
 opentelemetry-collector:
   enabled: true
+  nodeSelector: {}
+  tolerations: []
   mode: deployment
   extraEnvs:
     - name: CLICKHOUSE_PASSWORD
@@ -504,6 +486,10 @@ opentelemetry-collector:
         timeout: 5s
         send_batch_size: 100000
     exporters:
+      otlp:
+        endpoint: otel-collector.vmonitor-platform-backend:4317
+        tls:
+          insecure: true
       clickhouse:
         endpoint: tcp://coroot-clickhouse:9000?dial_timeout=10s&compress=lz4
         database: default
@@ -523,7 +509,7 @@ opentelemetry-collector:
       pipelines:
         traces:
           processors: [batch]
-          exporters: [clickhouse]
+          exporters: [clickhouse, otlp]
           receivers: [otlp]
         logs:
           processors: [batch]
